@@ -40,6 +40,9 @@ module Cql
           end
           (size - number_string.length).times { fraction_string << ZERO }
           fraction_string << number_string
+        elsif size < 0
+          fraction_string = number_string
+          fraction_string << ("0" * size.abs)
         else
           fraction_string = number_string[0, number_string.length - size]
           fraction_string << DECIMAL_POINT

@@ -77,6 +77,16 @@ module Cql
           Decoding.read_decimal!(buffer).should == BigDecimal.new('-0.0012095473475870063')
         end
 
+        it 'decodes a decimal in normal form' do
+          buffer = ByteBuffer.new("\xFF\xFF\xFF\xFE\x05")
+          Decoding.read_decimal!(buffer).should == BigDecimal.new('5E+2')
+        end
+
+        it 'decodes a decimal in normal form' do
+          buffer = ByteBuffer.new("\u0000\u0000\u0000\u0003\u0005")
+          Decoding.read_decimal!(buffer).should == BigDecimal.new('5E-3')
+        end
+
         it 'consumes the bytes' do
           buffer << 'HELLO'
           Decoding.read_decimal!(buffer, buffer.length - 5)
@@ -263,7 +273,7 @@ module Cql
         it 'decodes a UUID as a Cql::Uuid' do
           Decoding.read_uuid!(buffer).should == Uuid.new('a4a70900-24e1-11df-8924-001ff3591711')
         end
-        
+
         it 'decodes a UUID as a Cql::TimeUuid' do
           uuid = Decoding.read_uuid!(buffer, TimeUuid)
           uuid.should == TimeUuid.new('a4a70900-24e1-11df-8924-001ff3591711')
@@ -274,7 +284,7 @@ module Cql
           Decoding.read_uuid!(buffer)
           buffer.should be_empty
         end
-        
+
         it 'raises an error when there a not enough bytes in the buffer' do
           b = ByteBuffer.new(buffer.discard(2).read(5))
           expect { Decoding.read_uuid!(b) }.to raise_error(DecodingError)

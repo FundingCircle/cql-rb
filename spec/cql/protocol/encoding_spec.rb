@@ -327,6 +327,11 @@ module Cql
       end
 
       describe '#write_decimal' do
+        it 'encodes a BigDecimal in normal form' do
+          Encoding.write_decimal(buffer, BigDecimal.new('5E+2'))
+          buffer.should eql_bytes("\xFF\xFF\xFF\xFE\x05")
+        end
+
         it 'encodes a BigDecimal as a decimal' do
           Encoding.write_decimal(buffer, BigDecimal.new('1042342234234.123423435647768234'))
           buffer.should eql_bytes("\x00\x00\x00\x12\r'\xFDI\xAD\x80f\x11g\xDCfV\xAA")
@@ -341,6 +346,11 @@ module Cql
         it 'returns the buffer' do
           result = Encoding.write_decimal(buffer, BigDecimal.new('3.14'))
           result.should equal(buffer)
+        end
+
+        it ')))' do
+          Encoding.write_decimal(buffer, BigDecimal.new('5E-3'))
+          buffer.should eql_bytes("\u0000\u0000\u0000\u0003\u0005")
         end
       end
 
