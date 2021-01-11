@@ -31,7 +31,7 @@ GEM
       slop (~> 3.3.1)
       spoon (~> 0.0)
     rake (10.0.2)
-    redcarpet (2.2.2)
+    redcarpet (3.5.1)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rspec (2.14.1)
